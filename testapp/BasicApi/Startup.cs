@@ -83,9 +83,9 @@ namespace BasicApi
             services.AddSingleton<PetRepository>(new PetRepository());
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IApplicationEnvironment applicationEnvironment)
         {
-            CreateDatabase(app.ApplicationServices);
+            CreateDatabase(app.ApplicationServices, applicationEnvironment);
 
             app.Use(next => async context =>
             {
@@ -105,7 +105,7 @@ namespace BasicApi
             app.UseMvc();
         }
 
-        private void CreateDatabase(IServiceProvider services)
+        private void CreateDatabase(IServiceProvider services, IApplicationEnvironment applicationEnvironment)
         {
             using (var serviceScope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -118,7 +118,7 @@ namespace BasicApi
                     connection.Open();
 
                     var command = connection.CreateCommand();
-                    command.CommandText = File.ReadAllText("seed.sql");
+                    command.CommandText = File.ReadAllText(Path.Combine(applicationEnvironment.ApplicationBasePath, "seed.sql"));
                     command.ExecuteNonQuery();
                 }
             }

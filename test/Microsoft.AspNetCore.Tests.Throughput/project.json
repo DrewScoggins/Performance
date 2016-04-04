@@ -4,9 +4,12 @@
     "Benchmarks.Utility": "1.0.0-*"
   },
   "frameworks": {
-    "netstandardapp1.5": {
+    "netcoreapp1.0": {
       "dependencies": {
-        "dotnet-test-xunit": "1.0.0-dev-*"
+        "Microsoft.NETCore.App": {
+             "type": "platform",
+             "version": "1.0.0-*"
+         }
       },
       "imports": [
         "dnxcore50",

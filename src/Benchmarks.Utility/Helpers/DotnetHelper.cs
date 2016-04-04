@@ -11,7 +11,7 @@ namespace Benchmarks.Utility.Helpers
     public class DotnetHelper
     {
         private static readonly DotnetHelper _default = new DotnetHelper();
-        private readonly string _executablePath = Path.Combine("cli", "bin", "dotnet.exe");
+        private readonly string _executablePath = "dotnet.exe";
         private readonly string _defaultDotnetHome = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "Microsoft", "dotnet");
 
         public static DotnetHelper GetDefaultInstance() => _default;

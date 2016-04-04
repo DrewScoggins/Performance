@@ -16,14 +16,17 @@
     "Microsoft.AspNetCore.StaticFiles": "1.0.0-*"
   },
   "frameworks": {
-    "netstandardapp1.5": {
+    "netcoreapp1.0": {
+      "dependencies": {
+         "Microsoft.NETCore.App": {
+             "type": "platform",
+             "version": "1.0.0-*"
+         }
+      },
       "imports": [
         "dnxcore50",
         "portable-net451+win8"
-      ],
-      "dependencies": {
-        "NETStandard.Library": "1.5.0-*"
-      }
+      ]
     },
     "net451": { }
   },

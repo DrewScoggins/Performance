@@ -1,38 +1,47 @@
 ﻿{
-  "version": "1.0.0-*",
-  "commands": {
-    "test": "xunit.runner.aspnet"
-  },
-  "dependencies": {
-    "BasicApi": "1.0.0-*",
-    "BasicViews": "1.0.0-*",
-    "BigModelBinding": "1.0.0-*",
-    "BigViews": "1.0.0-*",
-    "LargeStaticView": "1.0.0-*",
-    "LocalizedViews": "1.0.0-*",
-    "RazorCodeGenerator": "1.0.0-*",
+    "version": "1.0.0-*",
+    "compilationOptions": {
+        "preserveCompilationContext": true
+    },
+    "runtimeOptions": {
+        "configProperties": {
+            "System.GC.Server": true,
+            "System.GC.Concurrent": true
+        }
+    },
+    "commands": {
+        "test": "xunit.runner.aspnet"
+    },
+    "dependencies": {
+        "BasicApi": "1.0.0-*",
+        "BasicViews": "1.0.0-*",
+        "BigModelBinding": "1.0.0-*",
+        "BigViews": "1.0.0-*",
+        "LargeStaticView": "1.0.0-*",
+        "LocalizedViews": "1.0.0-*",
+        "RazorCodeGenerator": "1.0.0-*",
 
-    "Microsoft.AspNetCore.TestHost": "1.0.0-*",
-    "Microsoft.Extensions.Configuration": "1.0.0-*",
-    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-*",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*",
-    "System.Net.Http": "4.0.1-beta-*",
-    "System.Collections": "4.0.11-*",
-    "System.IO": "4.1.0-*",
-    "System.Reflection": "4.1.0-*",
-    "System.Runtime": "4.1.0-*",
-    "System.Threading": "4.0.11-*"
-  },
-  "frameworks": {
-    "dnx451": {
-      "dependencies": {
-        "xunit.runner.aspnet": "2.0.0-aspnet-*"
-      },
-      "frameworkAssemblies": {
-        "System.Reflection": ""
-      }
-    }
-  },
-  "testRunner": "xunit"
+        "Microsoft.AspNetCore.TestHost": "1.0.0-*",
+        "Microsoft.Extensions.Configuration": "1.0.0-*",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-*",
+        "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*",
+        "System.Net.Http": "4.0.1-beta-*",
+        "System.Collections": "4.0.11-*",
+        "System.IO": "4.1.0-*",
+        "System.Reflection": "4.1.0-*",
+        "System.Runtime": "4.1.0-*",
+        "System.Threading": "4.0.11-*"
+    },
+    "frameworks": {
+        "dnx451": {
+            "dependencies": {
+                "xunit.runner.aspnet": "2.0.0-aspnet-*"
+            },
+            "frameworkAssemblies": {
+                "System.Reflection": ""
+            }
+        }
+    },
+    "testRunner": "xunit"
 }

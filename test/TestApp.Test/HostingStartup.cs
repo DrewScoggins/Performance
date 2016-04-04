@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.Versioning;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 
@@ -14,22 +14,27 @@ namespace MvcBenchmarks.InMemory
 {
     public static class HostingStartup
     {
+        private static readonly string _testAppRelativeFolder = Path.Combine("..", "..", "..", "..", "testapp");
         public static string GetProjectDirectoryOf<TStartup>()
         {
-            var libraryManager = DnxPlatformServices.Default.LibraryManager;
-
-            var applicationName = typeof(TStartup).GetTypeInfo().Assembly.GetName().Name;
-            var library = libraryManager.GetLibrary(applicationName);
-            return Path.GetDirectoryName(library.Path);
+            return GetProjectDirectoryOf(typeof(TStartup).GetTypeInfo().Assembly);
+        }
+        public static string GetProjectDirectoryOf(Assembly assembly)
+        {
+            var applicationName = assembly.GetName().Name;
+            return Path.GetFullPath(Path.Combine(
+               PlatformServices.Default.Application.ApplicationBasePath,
+               _testAppRelativeFolder,
+               applicationName
+            ));
         }
 
         public static WebHostBuilder UseProjectOf<TStartup>(this WebHostBuilder builder)
         {
-            var applicationName = typeof(TStartup).GetTypeInfo().Assembly.GetName().Name;
-            var webRoot = GetProjectDirectoryOf<TStartup>();
+            var startupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
+            var applicationName = startupAssembly.GetName().Name;
+            var webRoot = GetProjectDirectoryOf(startupAssembly);
 
-            var assemblyProvider = new StaticAssemblyProvider();
-            assemblyProvider.CandidateAssemblies.Add(typeof(TStartup).Assembly);
             builder.ConfigureServices(services =>
             {
                 var applicationEnvironment = new TestApplicationEnvironment(
@@ -44,11 +49,13 @@ namespace MvcBenchmarks.InMemory
                     webRoot,
                     new WebHostOptions
                     {
-                        Environment = "Production",
+                        Environment = "Production"
                     });
                 services.AddSingleton<IHostingEnvironment>(hostingEnvironment);
 
-                services.AddSingleton<IAssemblyProvider>(assemblyProvider);
+                var manager = new ApplicationPartManager();
+                manager.ApplicationParts.Add(new AssemblyPart(startupAssembly));
+                services.AddSingleton(manager);
             });
 
             return builder;
@@ -61,7 +68,6 @@ namespace MvcBenchmarks.InMemory
             public TestApplicationEnvironment(IApplicationEnvironment original, string name, string path)
             {
                 _original = original;
-
                 ApplicationName = name;
                 ApplicationBasePath = path;
             }

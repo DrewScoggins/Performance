@@ -13,12 +13,12 @@ namespace BasicViews
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment hosting)
+        public Startup(IHostingEnvironment hosting, IApplicationEnvironment applicationEnvironment)
         {
             Configuration = 
                 new ConfigurationBuilder()
+                .SetBasePath(applicationEnvironment.ApplicationBasePath)
                 .AddJsonFile("appsettings.json")
-                .SetBasePath(PlatformServices.Default.Application.ApplicationBasePath)
                 .Build();
         }
 

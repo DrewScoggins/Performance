@@ -1,3 +1,11 @@
+$repoRoot = $(git rev-parse --show-toplevel)
+
+## run "build pre-clean" to ensure we have the lastest dotnet
+& (Join-Path $repoRoot build.ps1) pre-clean
+
+# Set targetApp name and workspace
+& (Join-Path $PSScriptRoot SetEnv.ps1)
+
 if (! (Test-Path variable:global:targetApp)) {
     Write-Error "Target application is not set"
     Exit -1
@@ -18,17 +26,7 @@ if (! (Test-Path $global:workspace)) {
     Exit -1
 }
 
-## clone performance branch
-$performanceReproPath = [System.IO.Path]::Combine($global:workspace, "Performance")
-
-if (Test-Path $performanceReproPath)
-{
-    Remove-Item $performanceReproPath -Recurse -Force
-}
-
-git clone "https://github.com/aspnet/Performance.git" "$performanceReproPath"
-
-$appLocation = [System.IO.Path]::Combine($performanceReproPath, "testapp", $global:targetApp)
+$appLocation = [System.IO.Path]::Combine($repoRoot, "testapp" , $global:targetApp)
 
 if (! (Test-Path $appLocation) )
 {
@@ -38,12 +36,13 @@ if (! (Test-Path $appLocation) )
 
 ## publish targeted application
 pushd $appLocation
-dotnet restore
+dotnet restore --infer-runtimes
 $publishLocation = [System.IO.Path]::Combine($global:workspace, "publish")
-    
+
 if (Test-Path $publishLocation) {
+    Write-Host "Clearing publish directory ${publishLocation}..."
     Remove-Item $publishLocation -Force -Recurse
 }
 
-dotnet publish -o (Join-Path $publishLocation ($global:targetApp + "0")) --configuration Release --framework "netstandardapp1.5"
+dotnet publish -o (Join-Path $publishLocation ($global:targetApp)) --configuration Release
 popd

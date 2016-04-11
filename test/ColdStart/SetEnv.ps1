@@ -1,14 +1,13 @@
 $global:targetApp = "HelloWorldMvc"
-$global:toolsPath = "C:\Program Files (x86)\Git\bin"  ## CHANGE ME: point to where curl is
 $global:workspace = [System.IO.Path]::Combine($env:USERPROFILE, "aspnet", "tests", "workspace")
-
-if (! (Test-Path (Join-Path $global:toolsPath "curl.exe"))) {
-    Write-Error "Please edit `global:toolsPath to a directory containing curl.exe"
-    Exit -1
-}
 
 if (! (Test-Path $global:workspace)) {
     mkdir $global:workspace
+}
+
+if(($env:PERFTOOLS) -and (Test-Path $env:PERFTOOLS) -and !($env:PATH.StartsWith($env:PERFTOOLS + ";"))){
+    $env:PATH = $env:PERFTOOLS + ";" +  $env:PATH
+    Write-Host "Adding TOOLS PATH $env:PERFTOOLS"
 }
 
 $outputDir = [System.IO.Path]::Combine($global:workspace, "tests", "current")
@@ -17,7 +16,7 @@ if (! (Test-Path $outputDir)) {
     mkdir $outputDir
 }
 
-$global:outputFile = (Get-ChildItem $outputDir | Select-Object FullName -Last 1).FullName
+$global:outputFile = (Get-ChildItem -filter *.csv $outputDir | Select-Object FullName -Last 1).FullName
 
 if ([System.String]::IsNullOrEmpty($global:outputFile)) {
     $runId = Get-Date -Format yyyy-MM-dd-HH-mm-ss
@@ -25,5 +24,3 @@ if ([System.String]::IsNullOrEmpty($global:outputFile)) {
 }
 
 Write-Host "Tests will be recorded in file: $outputFile"
-
-$env:DOTNET_PACKAGES_CACHE="${env:USERPROFILE}\.nuget\packages"

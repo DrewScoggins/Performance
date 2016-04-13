@@ -13,14 +13,13 @@
   "frameworks": {
     "netcoreapp1.0": {
       "dependencies": {
-        "Microsoft.NETCore.App": {
-             "type": "platform",
-             "version": "1.0.0-*"
-         }
+        "NETStandard.Library": "1.5.0-*",
+        "dotnet-test-xunit": "1.0.0-dev-*"
       },
       "imports": [
         "dnxcore50",
-        "portable-net451+win8"
+        "portable-net451+win8",
+        "netstandardapp1.5"
       ]
     },
     "net451": {

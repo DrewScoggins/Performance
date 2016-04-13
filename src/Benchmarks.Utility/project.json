@@ -15,15 +15,13 @@
     },
     "netcoreapp1.0": {
       "dependencies": {
-         "Microsoft.NETCore.App": {
-             "type": "platform",
-             "version": "1.0.0-*"
-         },
+        "NETStandard.Library": "1.5.0-*",
         "System.Dynamic.Runtime": "4.0.11-*"
       },
       "imports": [
         "dnxcore50",
-        "portable-net451+win8"
+        "portable-net451+win8",
+        "netstandardapp1.5"
       ]
     }
   }
